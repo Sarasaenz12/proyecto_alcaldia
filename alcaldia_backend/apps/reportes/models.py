@@ -17,6 +17,7 @@ class ReporteGenerado(models.Model):
 
     titulo = models.CharField(max_length=300)
     descripcion = models.TextField(blank=True, null=True)
+    datos = models.JSONField(default=dict, blank=True, null=True)
     tipo_reporte = models.CharField(
         max_length=20,
         choices=TIPO_REPORTE_CHOICES,
@@ -58,6 +59,14 @@ class ReporteGenerado(models.Model):
     def __str__(self):
         return f"{self.titulo} - {self.usuario_generador.get_full_name()}"
 
+class Reporte(models.Model):
+    titulo = models.CharField(max_length=200)
+    fecha_generado = models.DateTimeField(auto_now_add=True)
+    archivo = models.ForeignKey(ArchivoExcel, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.titulo
+
 
 class ConfiguracionGrafico(models.Model):
     """
@@ -92,6 +101,10 @@ class ConfiguracionGrafico(models.Model):
         verbose_name_plural = 'Configuraciones de Gráficos'
         db_table = 'configuraciones_graficos'
         ordering = ['-fecha_creacion']
+        permissions = [
+            ("puede_generar_reportes", "Puede generar reportes"),
+            ("puede_exportar_datos", "Puede exportar datos"),
+        ]
 
     def __str__(self):
         return f"{self.nombre} ({self.get_tipo_grafico_display()})"

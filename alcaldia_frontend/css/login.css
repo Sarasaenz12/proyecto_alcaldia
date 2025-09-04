@@ -1,0 +1,111 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: #ffffff;
+    font-family: "Montserrat", sans-serif
+}
+
+.header{
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 20px;
+    background-color: #155b2a;
+    color: #eee;
+}
+
+.titles{
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.logo-alcaldia{
+    width: 200px;
+    padding-left: 15px;
+}
+
+h1{
+    font-size: 25px;
+}
+
+h3{
+    align-self: center;
+}
+
+.login{
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin: 80px auto;
+    padding: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    box-shadow: 0 0 3px #0009;
+}
+
+.form-login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+h2{
+    text-align: center;
+    margin: 18px;
+}
+
+.form-input{
+    height: 30px;
+    border:none;
+    margin-left: 8px;
+    background-color: transparent;
+    border-bottom: 1px solid #000;
+    font-size: 15px;
+}
+
+.form-bottom{
+    width: 200px;
+    margin: 20px auto 0;
+    height: 32px;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-input:focus{
+    outline: none;
+}
+
+.form-bottom:hover{
+    background-color: #1da038;
+    color: #ffffff;
+    border: none;
+}
+
+.link-invitado{
+    text-align: left;
+    margin-top: -6px;
+    font-size: 12px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 600;
+}
+
+.link-invitado:hover{
+    color: #777777;
+    text-decoration: underline;
+}
+

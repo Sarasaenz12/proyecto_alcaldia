@@ -5,6 +5,8 @@ from django.core.files.uploadedfile import UploadedFile
 from django.conf import settings
 import os
 import magic
+from django.db.models import Count, Q
+
 from .models import ArchivoExcel, RegistroDato
 
 
@@ -191,10 +193,16 @@ class FiltrosExcel:
             return sorted(list(valores_unicos))
 
     @staticmethod
-    def filtrar_registros(filtros: Dict[str, Any]) -> List[RegistroDato]:
+    def filtrar_registros(filtros: Dict[str, Any]):
         """
-        Filtra registros según los criterios especificados
+        Filtra registros según los criterios especificados (CORREGIDO)
         """
+        # Obtener solo registros del último archivo del usuario si no se especifica archivo_id
+        if 'archivo_id' not in filtros:
+            ultimo_archivo = ArchivoExcel.objects.order_by('-fecha_subida').first()
+            if ultimo_archivo:
+                filtros['archivo_id'] = ultimo_archivo.id
+
         queryset = RegistroDato.objects.all()
 
         # Filtros básicos
@@ -202,21 +210,40 @@ class FiltrosExcel:
             queryset = queryset.filter(archivo_id=filtros['archivo_id'])
 
         if 'anio' in filtros:
-            queryset = queryset.filter(anio=filtros['anio'])
+            queryset = queryset.filter(anio__icontains=str(filtros['anio']))
 
         if 'dependencia' in filtros:
-            queryset = queryset.filter(dependencia__icontains=filtros['dependencia'])
+            queryset = queryset.filter(dependencia__icontains=str(filtros['dependencia']))
 
         if 'indicador' in filtros:
-            queryset = queryset.filter(indicador__icontains=filtros['indicador'])
+            queryset = queryset.filter(indicador__icontains=str(filtros['indicador']))
 
-        # Filtros avanzados en JSON
+        # Nuevo: Búsqueda por texto en campos JSON
+        if 'busqueda_texto' in filtros:
+            busqueda = filtros['busqueda_texto']
+            campo = busqueda.get('campo')
+            valor = busqueda.get('valor')
+
+            if campo and valor:
+                # Búsqueda que contiene el texto (insensible a mayúsculas/minúsculas)
+                queryset = queryset.filter(
+                    datos__has_key=campo
+                ).extra(
+                    where=["LOWER(datos->>%s) LIKE LOWER(%s)"],
+                    params=[campo, f'%{valor}%']
+                )
+
+        # Filtros avanzados en JSON (mantenido para compatibilidad)
         if 'filtros_json' in filtros:
             for campo, valor in filtros['filtros_json'].items():
                 if valor:
                     queryset = queryset.filter(datos__has_key=campo)
                     if isinstance(valor, str):
-                        queryset = queryset.filter(datos__contains={campo: valor})
+                        # Usar búsqueda que contiene en lugar de exacta
+                        queryset = queryset.extra(
+                            where=["LOWER(datos->>%s) LIKE LOWER(%s)"],
+                            params=[campo, f'%{valor}%']
+                        )
 
         return queryset.select_related('archivo')
 
@@ -251,39 +278,67 @@ class EstadisticasExcel:
         return resumen
 
     @staticmethod
-    def datos_para_grafico(tipo_grafico: str, filtros: Dict[str, Any]) -> Dict[str, Any]:
+    def datos_para_grafico(tipo_grafico: str, filtros: dict) -> dict:
         """
-        Prepara datos para generar gráficos
+        Genera datos para gráficos con filtros mejorados
         """
-        registros = FiltrosExcel.filtrar_registros(filtros)
+        # Permitir pasar registros ya filtrados
+        if 'registros' in filtros:
+            registros = filtros['registros']
+        else:
+            registros = FiltrosExcel.filtrar_registros(filtros)
 
-        if tipo_grafico == 'por_dependencia':
-            datos = {}
-            for registro in registros:
-                dep = registro.dependencia or 'Sin dependencia'
-                if dep not in datos:
-                    datos[dep] = 0
-                datos[dep] += 1
+        campo = tipo_grafico.replace('por_', '').replace('_', ' ')
 
-            return {
-                'labels': list(datos.keys()),
-                'values': list(datos.values()),
-                'title': 'Registros por Dependencia'
-            }
+        # Normalizar nombre del campo
+        campo_normalizado = campo.lower().replace(' ', '_')
 
-        elif tipo_grafico == 'por_ano':
-            datos = {}
-            for registro in registros:
-                ano = registro.anio or 'Sin año'
-                if ano not in datos:
-                    datos[ano] = 0
-                datos[ano] += 1
+        # Agrupar por campos estándar o dinámicos
+        if campo in ['dependencia', 'anio', 'indicador']:
+            conteo = registros.values(campo).annotate(total=Count('id')).order_by('-total')
+            labels = [str(c[campo]) for c in conteo if c[campo]]
+            values = [c['total'] for c in conteo]
+        else:
+            # Agrupar por campos JSON dinámicos (MEJORADO)
+            json_agrupado = {}
+            total_procesados = 0
 
-            return {
-                'labels': list(datos.keys()),
-                'values': list(datos.values()),
-                'title': 'Registros por Año'
-            }
+            for r in registros:
+                if r.datos and isinstance(r.datos, dict):
+                    # Buscar el campo exacto o variaciones
+                    valor = None
 
-        # Más tipos de gráficos se pueden agregar aquí
-        return {'labels': [], 'values': [], 'title': 'Sin datos'}
+                    # Buscar exacto
+                    if campo in r.datos:
+                        valor = r.datos[campo]
+                    else:
+                        # Buscar insensible a mayúsculas/minúsculas
+                        for key, val in r.datos.items():
+                            if key.lower() == campo.lower():
+                                valor = val
+                                break
+
+                    if valor is not None:
+                        # Convertir valores complejos a string
+                        if isinstance(valor, (list, dict)):
+                            valor = str(valor)
+                        elif isinstance(valor, (int, float)):
+                            valor = str(valor)
+                        else:
+                            valor = str(valor).strip()
+
+                        if valor:  # Solo contar valores no vacíos
+                            json_agrupado[valor] = json_agrupado.get(valor, 0) + 1
+                            total_procesados += 1
+
+            # Ordenar por cantidad descendente y limitar resultados
+            items_ordenados = sorted(json_agrupado.items(), key=lambda x: x[1], reverse=True)[:20]
+            labels = [str(item[0]) for item in items_ordenados]
+            values = [item[1] for item in items_ordenados]
+
+        return {
+            "labels": labels,
+            "values": values,
+            "title": f"Registros por {campo.title()}",
+            "total_registros": sum(values) if values else 0
+        }

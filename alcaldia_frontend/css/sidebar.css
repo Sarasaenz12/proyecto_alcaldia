@@ -1,0 +1,93 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: "Montserrat", sans-serif;
+}
+
+hr{
+    background-color: #0000;
+}
+
+.sidebar{
+    position: fixed;
+    background-color: #155b2a;
+    color: #ffffff;
+    height: 100vh;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+
+.sidebar-head {
+    padding: 25px 20px;
+    text-align: center;
+}
+
+
+.avatar-admin{
+    border-radius: 50% ;
+    width: 100px;
+    height: 90px;
+    border: 2px solid #ffffff;
+}
+
+.sidebar-title{
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.sidebar-subtitle{
+    font-size: 15px;
+    opacity: 0.7;
+}
+
+.sidebar-menu{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.menu-item{
+    list-style: none;
+}
+
+.enlace-link{
+    text-decoration: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 7px 25px;
+}
+
+.enlace-link:hover,
+.enlace-link:active{
+    background: #1da038;
+    border-left: 2px solid #777777;
+    transform: translateX(5px);
+    width: 255px;
+    height: 40px;
+}
+
+.menu-icon {
+    width: 20px;
+    margin-right: 12px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.logo{
+    margin-top: auto; /* Empuja el logo al final del sidebar */
+  padding: 20px;
+  text-align: center;
+}
+
+.logo-alcaldia{
+    width: 180px;
+}

@@ -40,3 +40,8 @@ class CustomUser(AbstractUser):
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
         db_table = 'auth_usuarios'
+
+    def has_perm(self, perm, obj=None):
+        if self.is_admin():
+            return True
+        return super().has_perm(perm, obj)

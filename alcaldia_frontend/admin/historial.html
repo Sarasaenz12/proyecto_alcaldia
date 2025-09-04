@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Funcionario</title>
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/invitado.css">
+  <link rel="shortcut icon" href="../logo/logo_alcaldia.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <nav class="sidebar" id="sidebar">
+      <!--Titulo del header-->
+      <div class="sidebar-head">
+        <div class="sidebar-avatar">
+          <img src="avatar_admin.png" class="avatar-admin" alt="">
+        </div>
+        <div class="sidebar-title">Panel Administror</div>
+        <div class="sidebar-subtitle">Sistema de indicadores</div>
+      </div>
+
+      <hr>
+      <!--secciones del header-->
+      <div class="sidebar-menu">
+
+        <div class="sidebar-reporte">
+          <ul>
+            <li class="menu-item">
+              <a href="reporte.html" class="enlace-link">
+                <span class="menu-icon">📊</span>
+                <span>Reporte</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-aggfun">
+          <ul>
+            <li class="menu-item">
+              <a href="historial.html" class="enlace-link">
+                <span class="menu-icon">📋</span>
+                <span>Historial</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-aggfun">
+          <ul>
+            <li class="menu-item">
+              <a href="crear-funcionario.html" class="enlace-link">
+                <span class="menu-icon">➕</span>
+                <span>Agregar funcionario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="index-section">
+          <ul>
+            <li class="menu-item">
+              <a href="../index.html" class="enlace-link">
+                <span class="menu-icon">🚪</span>
+                <span>Cerrar Sesión</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="logo">
+             <img src="../logo/Logo_horizontal.png" class="logo-alcaldia">
+      </div>
+  </nav>
+</header>
+
+<main class="main-container">
+    <header class="header-main">
+    <div class="title-main">
+      <h1 class="title">Historial</h1>
+        <h3>Seleccione un archivo</h3>
+    </div>
+</header>
+
+    <section class="section-table">
+    <h2 class="title-table">Lista de archivos</h2>
+    <table id="tabla-archivos" class="table">
+      <thead class="data">
+        <tr class="title-data">
+          <th class="encabezado">Nombre del archivo</th>
+          <th class="encabezado">fecha</th>
+        </tr>
+      </thead>
+      <tbody class="archivos">
+        <!-- archivos se cargan por JS -->
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<script src="../js/admin/historial.js"></script>
+</body>
+</html>

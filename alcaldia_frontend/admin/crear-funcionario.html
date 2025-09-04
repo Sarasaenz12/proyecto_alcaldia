@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Funcionario</title>
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/crear_funcionario.css">
+  <link rel="shortcut icon" href="../logo/logo_alcaldia.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<header>
+  <nav class="sidebar" id="sidebar">
+      <!--Titulo del header-->
+      <div class="sidebar-head">
+        <div class="sidebar-avatar">
+          <img src="avatar_admin.png" class="avatar-admin" alt="">
+        </div>
+        <div class="sidebar-title">Panel Administror</div>
+        <div class="sidebar-subtitle">Sistema de indicadores</div>
+      </div>
+
+      <hr>
+      <!--secciones del header-->
+      <div class="sidebar-menu">
+
+        <div class="sidebar-reporte">
+          <ul>
+            <li class="menu-item">
+              <a href="reporte.html" class="enlace-link">
+                <span class="menu-icon">📊</span>
+                <span>Reporte</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="sidebar-aggfun">
+          <ul>
+            <li class="menu-item">
+              <a href="historial.html" class="enlace-link">
+                <span class="menu-icon">📋</span>
+                <span>Historial</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-aggfun">
+          <ul>
+            <li class="menu-item">
+              <a href="crear-funcionario.html" class="enlace-link">
+                <span class="menu-icon">➕</span>
+                <span>Agregar funcionario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="index-section">
+          <ul>
+            <li class="menu-item">
+              <a href="../index.html" class="enlace-link">
+                <span class="menu-icon">🚪</span>
+                <span>Cerrar Sesión</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    <div class="logo">
+      <img src="../logo/Logo_horizontal.png" class="logo-alcaldia">
+    </div>
+  </nav>
+</header>
+<main class="main-container">
+  <header class="header-main">
+    <div class="title-main">
+      <h1 class="title">Crear funcionario</h1>
+      <h2 class="sub-title">Administra los perfiles de clientes</h2>
+    </div>
+    <div class="btn-crear">
+      <input type="button" value="Crear nuevo funcionario" class="btn-crear-fun">
+    </div>
+  </header>
+
+  <div id="formulario-funcionario" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2 class="modal-title">Crear nuevo funcionario</h2>
+      <form id="crearFuncionarioForm"  class="formularioForm">
+        <label>Nombre:</label>
+        <input type="text" id="nombre" placeholder="ingrese el nombre del funcionario" required>
+        <label>Correo:</label>
+        <input type="email" id="correo" placeholder="ingrese el correo del funcionario" required>
+        <label>Contraseña (8 caracteres):</label>
+        <input type="password" id="password" placeholder="ingrese la contraseña del funcioanrio" required>
+        <label>Telefono</label>
+        <input type="text" id="telefono" placeholder="ingrese la contraseña del funcioanrio" required>
+        <div style="margin-top: 10px;" class="btn-form">
+          <button type="submit" class="botones">Guardar</button>
+          <button type="button"  class="botones" onclick="cerrarModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="filter">
+    <h2>Filtros</h2>
+    <div class="input-filter">
+      <div class="form-group">
+        <label for="searchInput" class="form-label">Buscar Cliente</label>
+        <input type="text" id="searchInput" class="search-input" placeholder="Nombre, email...">
+      </div>
+      <div class="form-group">
+        <label for="sortBy" class="form-label">Ordenar por</label>
+        <select id="sortBy" class="form-select">
+          <option value="name_asc">Nombre A-Z</option>
+          <option value="name_desc">Nombre Z-A</option>
+          <option value="date_desc">Más recientes</option>
+          <option value="date_asc">Más antiguos</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="btn-clean">
+          <input type="button" class="clean-filter" value="Limpiar filtros">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin: 20px;">
+    <h2 class="title-table">Lista de Funcionarios</h2>
+    <table border="1" width="100%" id="tabla-funcionarios" class="table">
+      <thead class="data">
+        <tr class="title-data">
+          <th class="encabezado">Nombre</th>
+          <th class="encabezado">Correo</th>
+          <th class="encabezado">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="data-fun">
+        <!-- Funcionarios se cargan por JS -->
+      </tbody>
+    </table>
+  </section>
+</main>
+  <script src="../js/admin/crearFuncionario.js"></script>
+<script>
+function cerrarModal() {
+  document.getElementById("formulario-funcionario").style.display = "none";
+}
+</script>
+</body>
+</html>

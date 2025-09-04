@@ -1,0 +1,36 @@
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos de desarrollo
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencias de Node (si las hubiera)
+node_modules/
+
+# Archivos temporales
+.tmp
+.cache
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Documentación
+README.md
+*.md

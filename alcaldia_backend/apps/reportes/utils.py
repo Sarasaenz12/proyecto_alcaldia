@@ -311,7 +311,7 @@ class GeneradorReportes:
 
     def guardar_reporte(self, tipo_reporte: str, archivo_generado: ContentFile) -> ReporteGenerado:
         """
-        Guarda el reporte en la base de datos
+        Guarda el reporte en la base de datos incluyendo los datos clave del último registro
         """
         reporte = ReporteGenerado.objects.create(
             titulo=self.titulo,
@@ -320,7 +320,7 @@ class GeneradorReportes:
             usuario_generador=self.usuario
         )
 
-        # Guardar archivo
+        # Guardar archivo generado
         filename = f"reporte_{reporte.id}_{timezone.now().strftime('%Y%m%d_%H%M%S')}.{tipo_reporte}"
         reporte.archivo_generado.save(filename, archivo_generado)
 
@@ -328,6 +328,20 @@ class GeneradorReportes:
         if 'archivo_ids' in self.filtros:
             archivos = ArchivoExcel.objects.filter(id__in=self.filtros['archivo_ids'])
             reporte.archivos_incluidos.set(archivos)
+
+        # ⚠️ Nuevo: guardar los datos clave del último registro (si hay datos)
+        if self.datos.exists():
+            ultimo = self.datos.last()
+            reporte.datos = {
+                "Dependencia": ultimo.dependencia,
+                "Funcionario": getattr(ultimo, "funcionario", ""),
+                "Valor": ultimo.valor,
+                "Unidad": getattr(ultimo, "unidad", ""),
+                "Fecha de reporte": str(getattr(ultimo, "fecha_reporte", "")),
+                "Observaciones": getattr(ultimo, "observaciones", "")
+            }
+
+            reporte.save()
 
         return reporte
 

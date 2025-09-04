@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="vi">
+    <title>Reportes</title>
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="shortcut icon" href="../logo/logo_alcaldia.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reporte.css">
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+<header>
+      <nav class="sidebar" id="sidebar">
+      <!--Titulo del header-->
+      <div class="sidebar-head">
+        <div class="sidebar-avatar">
+          <img src="avatar_admin.png" class="avatar-admin" alt="">
+        </div>
+        <div class="sidebar-title">Panel Administror</div>
+        <div class="sidebar-subtitle">Sistema de indicadores</div>
+      </div>
+
+      <hr>
+      <!--secciones del header-->
+      <div class="sidebar-menu">
+
+          <div class="sidebar-reporte">
+          <ul>
+            <li class="menu-item">
+              <a href="reporte.html" class="enlace-link">
+                <span class="menu-icon">📊</span>
+                <span>Reporte</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="sidebar-aggfun">
+          <ul>
+            <li class="menu-item">
+              <a href="historial.html" class="enlace-link">
+                <span class="menu-icon">📋</span>
+                <span>Historial</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-aggfun">
+          <ul>
+            <li class="menu-item">
+              <a href="crear-funcionario.html" class="enlace-link">
+                <span class="menu-icon">➕</span>
+                <span>Agregar funcionario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="index-section">
+          <ul>
+            <li class="menu-item">
+              <a href="../index.html" class="enlace-link">
+                <span class="menu-icon">🚪</span>
+                <span>Cerrar Sesión</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+          
+          <div class="logo">
+             <img src="../logo/Logo_horizontal.png" class="logo-alcaldia">
+          </div>
+  </nav>
+</header>
+<main class="main-container">
+<header class="header-main">
+    <div class="title-main">
+      <h1 class="title">Generar Reporte</h1>
+    </div>
+
+    <form id="formularioExcel" class="form-excel" enctype="multipart/form-data">
+        <input type="file" name="archivo_excel" id="archivo_excel" class="archivo-excel" accept=".xlsx,.xls" >
+        <input type="submit" value="Generar reporte" class="btn-report">
+    </form>
+</header>
+
+    <div class="filter">
+        <h2>Filtros</h2>
+    <div class="input-filter">
+      <div class="form-group">
+        <label for="searchInput" class="form-label">Buscar Cliente</label>
+        <input type="text" id="searchInput" class="buscar-input" placeholder="Buscar por texto...">
+      </div>
+      <div class="form-group">
+          <label for="tipoGrafico" class="form-label">Agrupar por</label>
+          <select id="tipoGrafico" class="form-select">
+            <option value="" class="option-select">Seleccione columna</option>
+          </select>
+      </div>
+
+        <div class="form-group">
+              <label for="tipoGrafic" class="form-label">Tipo de gráfico:</label>
+              <select id="tipoGrafic" class="tipo_grafico">
+                <option value="bar">Barras</option>
+                <option value="pie">Torta</option>
+                <option value="line">Línea</option>
+                <option value="scatter">Dispersión</option>
+              </select>
+        </div>
+
+      <div class="form-group">
+        <div class="btn-clean">
+          <input type="button" class="clean-filter" value="Limpiar filtros">
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="graficos">
+        <div class="title-graficos">
+            <h2>Graficos</h2>
+        </div>
+    </div>
+
+</main>
+    <script src="../js/admin/reporte.js"></script>
+</body>
+</html>
